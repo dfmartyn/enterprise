@@ -14,7 +14,8 @@
     <modules>
         <module>ejb</module>
         <module>web</module>
-        <module>app</module>
+        <module>server</module>
+        <module>client</module>
     </modules>
 
     <dependencyManagement>
@@ -24,6 +25,13 @@
                 <artifactId>ejb</artifactId>
                 <version>${project.version}</version>
                 <type>ejb</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>ru.dfmartyn.enterprise</groupId>
+                <artifactId>ejb</artifactId>
+                <version>${project.version}</version>
+                <type>ejb-client</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>

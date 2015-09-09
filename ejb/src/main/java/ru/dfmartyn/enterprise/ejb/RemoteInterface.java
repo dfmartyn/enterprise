@@ -1,4 +1,4 @@
-package ru.dfmartyn.enterprise;
+package ru.dfmartyn.enterprise.ejb;
 
 import javax.ejb.Remote;
 

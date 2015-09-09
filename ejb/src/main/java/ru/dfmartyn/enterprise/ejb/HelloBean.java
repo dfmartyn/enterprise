@@ -1,4 +1,4 @@
-package ru.dfmartyn.enterprise;
+package ru.dfmartyn.enterprise.ejb;
 
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -6,7 +6,6 @@ import java.io.Serializable;
 /**
  * @author Dmitriy Martynov
  */
-@SessionScoped
 public class HelloBean implements Serializable{
 
     public String sayHello(){
