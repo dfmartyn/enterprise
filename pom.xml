@@ -42,22 +42,10 @@
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>javax.ejb</groupId>
-                <artifactId>javax.ejb-api</artifactId>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
                 <scope>provided</scope>
-                <version>3.2</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.enterprise</groupId>
-                <artifactId>cdi-api</artifactId>
-                <scope>provided</scope>
-                <version>1.2</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <scope>provided</scope>
-                <version>3.1.0</version>
+                <version>6.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

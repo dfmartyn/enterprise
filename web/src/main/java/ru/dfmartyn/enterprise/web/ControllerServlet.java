@@ -3,7 +3,6 @@ package ru.dfmartyn.enterprise.web;
 import ru.dfmartyn.enterprise.ejb.LocalInterface;
 
 import javax.ejb.EJB;
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,17 +13,28 @@ import java.io.IOException;
 /**
  * @author Dmitriy Martynov
  */
-@WebServlet(name = "ControllerServlet", urlPatterns = "hello")
+@WebServlet(name = "controller", urlPatterns = "hello")
 public class ControllerServlet extends HttpServlet {
+
+    private long id = System.currentTimeMillis();
 
     @EJB
     private LocalInterface stateless;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public ControllerServlet() {
+        System.out.println("Controller constructor. Id = " + id);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.getWriter().write("Controller id = " + id);
+        response.getWriter().write("\n");
         response.getWriter().write("Bean = " + stateless.toString());
         response.getWriter().write("\n");
         response.getWriter().write("Session Id = " + request.getSession().getId());
