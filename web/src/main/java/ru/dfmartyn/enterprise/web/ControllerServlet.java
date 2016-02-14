@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * @author Dmitriy Martynov
  */
-@WebServlet(name = "controller", urlPatterns = "hello")
+@WebServlet(name = "controller", urlPatterns = "/hello")
 public class ControllerServlet extends HttpServlet {
 
     private long id = System.currentTimeMillis();

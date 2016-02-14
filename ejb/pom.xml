@@ -24,6 +24,7 @@
                     <generateClient>true</generateClient>
                     <clientIncludes>
                         <clientInclude>ru/dfmartyn/enterprise/ejb/RemoteInterface.class</clientInclude>
+                        <clientInclude>ru/dfmartyn/enterprise/jms/SendMessageService.class</clientInclude>
                     </clientIncludes>
                 </configuration>
             </plugin>
