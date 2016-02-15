@@ -12,6 +12,7 @@ public class EJBCaller {
 
     private static final Logger log = Logger.getLogger(EJBCaller.class);
 
+
     public static void invokeStatelessEJB() {
         Context context = null;
         try {
