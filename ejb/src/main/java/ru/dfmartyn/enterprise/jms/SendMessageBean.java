@@ -1,107 +1,83 @@
 package ru.dfmartyn.enterprise.jms;
 
 
+import org.jboss.logging.Logger;
+
+import javax.annotation.Resource;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.jms.*;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * An EJB which sends a JMS message and update a JDBC table in the same transaction.
  */
+@Remote(SendMessageService.class)
 @Stateless(name = "message")
 public class SendMessageBean implements SendMessageService {
 
+    private static final Logger log = Logger.getLogger(SendMessageBean.class);
+
     private static final String TABLE = "hornetq_example";
 
-    public void createTable() throws Exception {
-        InitialContext ic = new InitialContext();
-        DataSource ds = (DataSource) ic.lookup("java:jboss/datasources/ExampleDS");
-        java.sql.Connection con = ds.getConnection();
+    @Resource(mappedName = "java:jboss/datasources/ExampleDS")
+    private DataSource dataSource;
+
+    @Resource(mappedName = "java:jboss/datasources/XADS")
+    private DataSource xaDataSource;
+
+    @Resource(mappedName = "java:/JmsXA")
+    private ConnectionFactory connectionFactory;
+
+    @Resource(mappedName = "java:/jms/queue/testQueue")
+    private Queue queue;
+
+    public void createTable() throws SQLException {
 
         // check if the table exists:
         boolean createTable = false;
-        try {
-            PreparedStatement pr = con.prepareStatement("SELECT * FROM " + SendMessageBean.TABLE + ";");
-            pr.executeQuery();
-            pr.close();
-        } catch (Exception e) {
-            createTable = true;
-        }
 
-        if (createTable) {
-            PreparedStatement pr = con.prepareStatement("CREATE TABLE " + SendMessageBean.TABLE +
-                    "(id VARCHAR(100), text VARCHAR(100));");
-            pr.execute();
-            pr.close();
-            System.out.println("Table " + SendMessageBean.TABLE + " created");
-        }
+        try (java.sql.Connection connnection = dataSource.getConnection()) {
 
-        con.close();
+            try (PreparedStatement testStatement = connnection.prepareStatement("SELECT * FROM " + SendMessageBean.TABLE + ";")) {
+                testStatement.executeQuery();
+            } catch (SQLException e) {
+                createTable = true;
+            }
+
+            if (createTable) {
+                PreparedStatement createTableStatement = connnection.prepareStatement(
+                        "CREATE TABLE " + SendMessageBean.TABLE + "(id VARCHAR(100), text VARCHAR(100));");
+                createTableStatement.execute();
+                createTableStatement.close();
+                log.info("Table " + SendMessageBean.TABLE + " created");
+            }
+        }
     }
 
-    public void sendAndUpdate(final String text) throws Exception {
-        InitialContext ic = null;
-        Connection jmsConnection = null;
-        java.sql.Connection jdbcConnection = null;
-
-        try {
-            // Step 1. Lookup the initial context
-            ic = new InitialContext();
-
-            // JMS operations
-
-            // Step 2. Look up the XA Connection Factory
-            ConnectionFactory cf = (ConnectionFactory) ic.lookup("java:/JmsXA");
-
-            // Step 3. Look up the Queue
-            Queue queue = (Queue) ic.lookup("queue/testQueue");
-
-            // Step 4. Create a connection, a session and a message producer for the queue
-            jmsConnection = cf.createConnection();
+    public void sendAndUpdate(final String text) throws JMSException, SQLException {
+        try (Connection jmsConnection = connectionFactory.createConnection();
+             java.sql.Connection jdbcConnection = xaDataSource.getConnection();
+             PreparedStatement preparedStatement = jdbcConnection.prepareStatement(
+                     "INSERT INTO " + SendMessageBean.TABLE + " (id, text) VALUES (?, ?);")
+        ) {
+            // Create a connection, a session and a message producer for the queue
             Session session = jmsConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             MessageProducer messageProducer = session.createProducer(queue);
 
-            // Step 5. Create a Text Message
+            // Create a Text Message
             TextMessage message = session.createTextMessage(text);
 
-            // Step 6. Send The Text Message
+            // Send The Text Message
             messageProducer.send(message);
-            System.out.println("Sent message: " + message.getText() + "(" + message.getJMSMessageID() + ")");
+            log.info("Sent message: " + message.getText() + "(" + message.getJMSMessageID() + ")");
 
-            // DB operations
-
-            // Step 7. Look up the XA Data Source
-            DataSource ds = (DataSource) ic.lookup("java:jboss/datasources/XADS");
-
-            // Step 8. Retrieve the JDBC connection
-            jdbcConnection = ds.getConnection();
-
-            // Step 9. Create the prepared statement to insert the text and the message's ID in the table
-            PreparedStatement pr = jdbcConnection.prepareStatement("INSERT INTO " + SendMessageBean.TABLE +
-                    " (id, text) VALUES ('" +
-                    message.getJMSMessageID() +
-                    "', '" +
-                    text +
-                    "');");
-
-            // Step 10. execute the prepared statement
-            pr.execute();
-
-            // Step 11. close the prepared statement
-            pr.close();
-        } finally {
-            // Step 12. Be sure to close all resources!
-            if (ic != null) {
-                ic.close();
-            }
-            if (jmsConnection != null) {
-                jmsConnection.close();
-            }
-            if (jdbcConnection != null) {
-                jdbcConnection.close();
-            }
+            // execute the prepared statement
+            preparedStatement.setString(1, message.getJMSMessageID());
+            preparedStatement.setString(2, text);
+            preparedStatement.execute();
         }
     }
 }

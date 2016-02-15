@@ -1,12 +1,12 @@
 package ru.dfmartyn.enterprise.jms;
 
-import javax.ejb.Remote;
+import javax.jms.JMSException;
+import java.sql.SQLException;
 
-@Remote
 public interface SendMessageService {
 
-    void sendAndUpdate(String text) throws Exception;
+    void sendAndUpdate(String text) throws SQLException, JMSException;
 
-    void createTable() throws Exception;
+    void createTable() throws SQLException;
 
 }
