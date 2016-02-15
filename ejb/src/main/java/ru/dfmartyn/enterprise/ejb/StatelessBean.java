@@ -1,17 +1,24 @@
 package ru.dfmartyn.enterprise.ejb;
 
+import org.jboss.logging.Logger;
 import ru.dfmartyn.enterprise.beans.HelloBean;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 /**
  * @author Dmitriy Martynov
  */
+@Remote(RemoteInterface.class)
+@Local(LocalInterface.class)
 @Stateless(name = "stateless")
 public class StatelessBean implements LocalInterface, RemoteInterface {
+
+    private static final Logger log = Logger.getLogger(StatelessBean.class);
 
     private long id = System.currentTimeMillis();
 
@@ -22,17 +29,17 @@ public class StatelessBean implements LocalInterface, RemoteInterface {
      * Default constructor
      */
     public StatelessBean() {
-        System.out.println("Stateless constructor. Id = " + id);
+        log.info("Stateless constructor. Id = " + id);
     }
 
     @PostConstruct
     void postConstruct() {
-        System.out.println("Post Construct. Id = " + id);
+        log.info("Post Construct. Id = " + id);
     }
 
     @PreDestroy
     void preDestroy() {
-        System.out.println("Pre Destroy. Id = " + id);
+        log.info("Pre Destroy. Id = " + id);
     }
 
     @Override
