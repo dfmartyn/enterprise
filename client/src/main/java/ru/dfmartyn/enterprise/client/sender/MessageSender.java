@@ -17,9 +17,9 @@ public class MessageSender {
         final String USERNAME = "guest";
         final String PASSWORD = "password";
         // For JBoss 7
-//        final String PROVIDER_URL = "remote://10.10.4.149:4447";
+//        final String PROVIDER_URL = "remote://localhost:4447";
         // For Wildfly 10
-        final String PROVIDER_URL = "http-remoting://10.10.4.149:8080";
+        final String PROVIDER_URL = "http-remoting://localhost:8080";
         final String JNDI_FACTORY = "org.jboss.naming.remote.client.InitialContextFactory";
         Context context = null;
         Connection connection = null;
