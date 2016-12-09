@@ -19,8 +19,6 @@ local.properties
 
 # Locally stored "Eclipse launch configurations"
 *.launch
-.project
-.classpath
 
 # CDT-specific
 .cproject
@@ -67,6 +65,9 @@ com_crashlytics_export_strings.xml
 #linux
 *~
 
+#Mac
+.DS_Store
+
 # KDE directory preferences
 .directory
 
@@ -92,7 +93,6 @@ $RECYCLE.BIN/
 *.un~
 Session.vim
 .netrwhist
-*~
 
 #sublime-text
 # workspace files are user-specific
