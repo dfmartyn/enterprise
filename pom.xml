@@ -16,8 +16,6 @@
     </properties>
 
     <modules>
-        <module>ejb</module>
-        <module>web</module>
         <module>server</module>
         <module>client</module>
     </modules>
