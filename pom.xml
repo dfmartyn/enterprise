@@ -38,7 +38,7 @@
             </dependency>
             <dependency>
                 <groupId>ru.dfmartyn.enterprise</groupId>
-                <artifactId>web</artifactId>
+                <artifactId>war</artifactId>
                 <version>${project.version}</version>
                 <type>war</type>
                 <scope>compile</scope>

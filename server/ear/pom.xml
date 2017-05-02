@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>ru.dfmartyn.enterprise</groupId>
-            <artifactId>web</artifactId>
+            <artifactId>war</artifactId>
             <type>war</type>
         </dependency>
     </dependencies>
@@ -44,7 +44,7 @@
                         </ejbModule>
                         <webModule>
                             <groupId>ru.dfmartyn.enterprise</groupId>
-                            <artifactId>web</artifactId>
+                            <artifactId>war</artifactId>
                             <bundleFileName>web.war</bundleFileName>
                             <contextRoot>enterprise</contextRoot>
                         </webModule>

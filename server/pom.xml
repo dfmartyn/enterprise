@@ -15,7 +15,7 @@
 
     <modules>
         <module>ejb</module>
-        <module>web</module>
+        <module>war</module>
         <module>ear</module>
     </modules>
 

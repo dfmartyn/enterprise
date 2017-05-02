@@ -1,5 +1,6 @@
 package ru.dfmartyn.enterprise.rest;
 
+
 import ru.dfmartyn.enterprise.dto.ValueText;
 
 import javax.validation.Valid;
