@@ -1,0 +1,21 @@
+{
+  "name": "enterprise",
+  "version": "1.0.0",
+  "description": "This is demo project",
+  "main": "main.js",
+  "scripts": {
+    "build": "webpack -p"
+  },
+  "author": "Dmitriy Martynov",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.2.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "url-loader": "^0.5.9",
+    "webpack": "^3.5.5"
+  }
+}
